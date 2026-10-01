@@ -1,0 +1,77 @@
+<main class="login-page">
+  <app-login-story />
+  <section class="access" aria-labelledby="welcome-heading">
+    <div class="access-content">
+      <span class="badge"><span class="status-dot"></span> DEMO WORKSPACE ACCESS</span>
+      <h2 id="welcome-heading">Welcome Back</h2>
+      <p class="intro">Sign in to access your financial dashboard.</p>
+      <form [formGroup]="form" (ngSubmit)="signIn()">
+        <label for="email">Email / Employee ID</label>
+        <div class="input-icon">
+          <app-icon name="mail" /><input
+            id="email"
+            type="email"
+            formControlName="email"
+            autocomplete="username"
+            spellcheck="false"
+            [attr.aria-invalid]="error() ? true : null"
+            aria-describedby="demo-note"
+          />
+        </div>
+        <label for="password">Password</label>
+        <div class="input-icon">
+          <app-icon name="lock" /><input
+            id="password"
+            [type]="visible() ? 'text' : 'password'"
+            formControlName="password"
+            autocomplete="current-password"
+          /><button
+            class="reveal"
+            type="button"
+            (click)="visible.set(!visible())"
+            [attr.aria-label]="visible() ? 'Hide password' : 'Show password'"
+            [attr.aria-pressed]="visible()"
+          >
+            <app-icon name="eye" />
+          </button>
+        </div>
+        <div class="form-note">
+          <label class="remember"
+            ><input type="checkbox" formControlName="remember" aria-describedby="remember-hint" />
+            Remember me</label
+          ><span id="remember-hint" class="sr-only"
+            >Remembers the demo email only, never your password or sign-in session.</span
+          ><button
+            class="text-button"
+            type="button"
+            (click)="help.set(!help())"
+            [attr.aria-expanded]="help()"
+          >
+            Forgot password?
+          </button>
+        </div>
+        @if (help()) {
+          <p class="feedback" role="status">
+            Demo password: <strong>FinFlowDemo!</strong> No password reset is needed.
+          </p>
+        }
+        @if (error()) {
+          <p class="feedback error" role="alert">{{ error() }}</p>
+        }
+        <button class="primary sign-in" [disabled]="!ready()" type="submit">
+          Sign In <app-icon name="arrow" />
+        </button>
+      </form>
+      <div class="divider"><span>OR</span></div>
+      <button class="secondary demo-button" [disabled]="!ready()" (click)="enterDemo()">
+        <app-icon name="bolt" /> Continue as Demo User
+      </button>
+      <p class="demo-note" id="demo-note">
+        <span aria-hidden="true">ⓘ</span> Demo credentials are pre-filled for portfolio access.<br /><span
+          class="demo-disclosure"
+          >Fictional data · Changes reset on reload</span
+        >
+      </p>
+    </div>
+  </section>
+</main>

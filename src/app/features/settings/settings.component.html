@@ -1,0 +1,151 @@
+<div class="page-header">
+  <div>
+    <h1>Settings</h1>
+    <p>A workspace that works for you.</p>
+  </div>
+</div>
+<div class="settings-tabs" role="group" aria-label="Settings sections">
+  <button
+    [class.selected]="tab() === 'general'"
+    [attr.aria-pressed]="tab() === 'general'"
+    (click)="tab.set('general'); message.set('')"
+  >
+    General settings</button
+  ><button
+    [class.selected]="tab() === 'users'"
+    [attr.aria-pressed]="tab() === 'users'"
+    (click)="tab.set('users'); message.set('')"
+  >
+    User management
+  </button>
+</div>
+@if (message()) {
+  <p class="notice" role="status">{{ message() }}</p>
+}
+@if (tab() === 'general') {
+  <section class="panel settings-panel">
+    <div class="panel-heading">
+      <div>
+        <h2>Workspace preferences</h2>
+        <p class="muted">Configure the sample workspace.</p>
+      </div>
+      <span class="pill">Demo only</span>
+    </div>
+    <form [formGroup]="preferences" (ngSubmit)="savePreferences()">
+      <label class="field"
+        >Workspace name<input formControlName="workspace" maxlength="60" required
+      /></label>
+      <div class="form-grid">
+        <label class="field"
+          >Reporting currency<input value="EUR · Euro" readonly /><small
+            >This demo uses EUR across all accounts.</small
+          ></label
+        ><label class="field"
+          >Number format<input value="English (Ireland) · 1,234.56" readonly
+        /></label>
+      </div>
+      <label class="checkbox-field"
+        ><input type="checkbox" formControlName="digest" /><span
+          >Weekly activity digest<small
+            >UI preference only; this demo does not send email.</small
+          ></span
+        ></label
+      >
+      <div class="form-actions">
+        <button class="primary" type="submit">Save preferences</button>
+      </div>
+    </form>
+  </section>
+  <section class="panel reset-panel">
+    <div>
+      <h2>Start fresh</h2>
+      <p class="muted">
+        Restore the original accounts and transactions. Your current demo entries will be removed.
+      </p>
+    </div>
+    @if (resetPending()) {
+      <div>
+        <p>Reset all demo accounts and transactions?</p>
+        <div class="form-actions">
+          <button class="secondary" (click)="resetPending.set(false)">Cancel</button
+          ><button class="danger" (click)="reset()">Confirm reset</button>
+        </div>
+      </div>
+    } @else {
+      <button class="secondary" (click)="resetPending.set(true)">Reset demo data</button>
+    }
+  </section>
+} @else {
+  <section class="panel">
+    <div class="panel-heading">
+      <div>
+        <h2>User management</h2>
+        <p class="muted">Sample team members and roles.</p>
+      </div>
+      <button class="primary" (click)="open()">＋ Add user</button>
+    </div>
+    <p class="notice">
+      Roles and status are illustrative. This frontend demo does not enforce permissions or send
+      invitations.
+    </p>
+    <div class="table-scroll">
+      <table>
+        <caption class="sr-only">
+          Demo team members
+        </caption>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users(); track user.id) {
+            <tr>
+              <td>
+                <strong>{{ user.name }}</strong>
+              </td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.role }}</td>
+              <td>{{ user.active ? 'Active' : 'Inactive' }}</td>
+              <td>
+                <button
+                  class="text-button"
+                  (click)="toggle(user.id)"
+                  [attr.aria-label]="(user.active ? 'Deactivate ' : 'Activate ') + user.name"
+                >
+                  {{ user.active ? 'Deactivate' : 'Activate' }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+}
+<app-modal
+  heading="Add demo user"
+  description="Create a fictional team member. No email invitation is sent."
+  ><form [formGroup]="userForm" (ngSubmit)="addUser()">
+    <label class="field">Full name<input formControlName="name" maxlength="60" required /></label
+    ><label class="field"
+      >Email address<input formControlName="email" type="email" maxlength="120" required /></label
+    ><label class="field"
+      >Role<select formControlName="role">
+        <option>Viewer</option>
+        <option>Accountant</option>
+      </select></label
+    >
+    @if (error()) {
+      <p class="error" role="alert">{{ error() }}</p>
+    }
+    <div class="form-actions">
+      <button class="secondary" type="button" (click)="modal().close()">Cancel</button
+      ><button class="primary" type="submit">Add demo user</button>
+    </div>
+  </form></app-modal
+>

@@ -1,0 +1,247 @@
+:host {
+  display: block;
+  min-height: 0;
+}
+.preview {
+  height: 100%;
+  min-height: 190px;
+  max-height: 400px;
+  display: flex;
+  transform: perspective(1200px) rotateY(-6deg) rotateX(3deg) rotateZ(2.5deg);
+  transform-origin: center;
+  border: 1px solid #397b85;
+  border-left: 5px solid #155560;
+  border-radius: 20px;
+  background: #071c26e8;
+  box-shadow:
+    0 14px 30px #0008,
+    inset 0 0 25px #22d4cb12;
+  overflow: hidden;
+  margin: 0 7px;
+}
+.preview-side {
+  width: 24%;
+  max-width: 140px;
+  flex-shrink: 0;
+  padding: 15px 13px;
+  border-right: 1px solid #203740;
+  background: #06192260;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: clamp(7px, 0.65vw, 10px);
+}
+.preview-side strong {
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.preview-side strong > span {
+  font-size: 24px;
+  color: var(--accent);
+}
+.preview-side > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #a6bdca;
+  padding: 5px 2px;
+  white-space: nowrap;
+}
+.preview-side app-icon {
+  font-size: 11px;
+}
+.preview-side .selected {
+  background: #07343c;
+  color: var(--accent);
+  padding: 7px 5px;
+  border-radius: 5px;
+  margin-left: -3px;
+}
+.preview-main {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  gap: 12px;
+}
+.preview-top {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 7px;
+  color: #aac0cd;
+}
+.preview-top .search {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: 1;
+  background: #1a303d;
+  border: 1px solid #223d49;
+  padding: 7px 5px;
+  border-radius: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.preview-top .period {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  font-size: 6px;
+}
+.preview-top app-icon {
+  font-size: 10px;
+}
+.mini-avatar {
+  width: 21px;
+  height: 21px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  background: #4aaff6;
+  border-radius: 50%;
+  color: white;
+  font-size: 8px;
+}
+.preview-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.preview-cards > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  background: linear-gradient(125deg, #142f3d, #0b222c);
+  padding: 12px 7px;
+  border: 1px solid #1b3540;
+  border-radius: 9px;
+}
+.preview-cards section {
+  min-width: 0;
+}
+.preview-cards small {
+  display: block;
+  font-size: 6px;
+  color: #91adbc;
+  white-space: nowrap;
+}
+.preview-cards strong {
+  display: block;
+  font-size: clamp(9px, 0.8vw, 12px);
+  margin: 7px 0;
+  white-space: nowrap;
+}
+.preview-cards section > span {
+  font-size: 6px;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.metric-icon {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 27px;
+  flex-shrink: 0;
+  font-size: 20px;
+  color: var(--accent);
+  border-radius: 5px;
+  background: #07414a;
+}
+.metric-icon.blue {
+  background: #0b344c;
+  color: #34b9f9;
+}
+.metric-icon app-icon {
+  font-size: 16px;
+}
+.preview-chart {
+  flex: 1;
+  min-height: 0;
+  padding: 12px;
+  background: linear-gradient(120deg, #0a2530, #10343e);
+  border: 1px solid #163c48;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+.preview-chart > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 8px;
+  gap: 5px;
+}
+.preview-chart > div > span {
+  font-size: 6px;
+  background: #203a48;
+  padding: 4px 6px;
+  border-radius: 4px;
+  color: #a9bfcb;
+}
+.preview-chart app-trend {
+  flex: 1;
+  min-height: 0;
+  --trend-height: 100%;
+}
+@media (min-width: 1300px) {
+  .preview-side {
+    padding: 20px 14px;
+  }
+  .preview-main {
+    padding: 17px;
+    gap: 14px;
+  }
+  .preview-cards > div {
+    padding: 14px 10px;
+  }
+}
+@media (max-height: 720px) {
+  .preview-main {
+    gap: 8px;
+    padding: 10px;
+  }
+  .preview-side {
+    padding: 10px;
+    gap: 3px;
+  }
+  .preview-side strong {
+    margin-bottom: 2px;
+  }
+  .preview-side > span {
+    padding: 4px 2px;
+  }
+  .preview-cards > div {
+    padding: 8px 6px;
+  }
+  .preview-chart {
+    padding: 9px;
+  }
+  .metric-icon {
+    width: 20px;
+    height: 23px;
+    font-size: 17px;
+  }
+}
+@media (max-width: 1100px) {
+  .metric-icon {
+    display: none;
+  }
+  .preview-top .period {
+    display: none;
+  }
+  .preview-cards strong {
+    font-size: 9px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .preview {
+    transform: none;
+  }
+}

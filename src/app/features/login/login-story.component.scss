@@ -1,0 +1,181 @@
+:host {display:flex;min-width:0;min-height:0;}
+
+.story {
+  padding: 26px 36px 22px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background:
+    linear-gradient(90deg, #03161a18, #03161a18),
+    url('/images/login-architecture.png') center/100% 100% no-repeat;
+}
+.story-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.story-top .badge {
+  font-size: 9px;
+  white-space: nowrap;
+  background: #104149ad;
+}
+.pitch {
+  margin-top: 30px;
+}
+.pitch h1 {
+  font-size: clamp(30px, 3.25vw, 50px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -1.3px;
+  margin: 0 0 12px;
+}
+.pitch h1 span {
+  color: var(--accent);
+}
+.pitch p {
+  color: #b7d1dc;
+  font-size: clamp(12px, 1.25vw, 16px);
+  line-height: 1.55;
+  margin: 0;
+}
+.benefits {
+  display: flex;
+  gap: 18px;
+  margin: 22px 0;
+}
+.benefits > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  flex: 1;
+}
+.benefit-icon {
+  display: grid;
+  place-items: center;
+  width: 37px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 1px solid #15545b;
+  border-radius: 10px;
+  background: linear-gradient(140deg, #0c5156, #06232a);
+  font-size: 22px;
+  color: var(--accent);
+}
+.benefits strong {
+  font-size: 10px;
+  white-space: nowrap;
+}
+.benefits p {
+  color: #a6c0ce;
+  font-size: 10px;
+  line-height: 1.5;
+  margin: 5px 0 0;
+}
+.story app-dashboard-preview {
+  flex: 1;
+  min-height: 0;
+  margin: 5px 3px 21px;
+}
+.story footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 9px;
+  color: #9bc4d2;
+  white-space: nowrap;
+}
+.footer-mark {
+  width: 44px;
+  height: 5px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--accent) 60%, #15515a 60%);
+}
+.story footer i {
+  height: 9px;
+  border-left: 1px solid #527b88;
+}
+@media (min-width: 900px) and (min-height: 600px) {
+  .story {
+    padding: clamp(22px, 3.5dvh, 38px) clamp(28px, 3.5vw, 54px) 22px;
+  }
+  .pitch {
+    margin-top: clamp(24px, 4dvh, 48px);
+  }
+  .benefits {
+    margin: clamp(18px, 3dvh, 30px) 0;
+  }
+}
+@media (min-width: 900px) and (max-height: 720px) {
+  .pitch h1 {
+    font-size: clamp(28px, 3.4vw, 40px);
+  }
+  .pitch p {
+    font-size: 13px;
+  }
+  .story-top .badge {
+    font-size: 8px;
+  }
+  .benefits {
+    gap: 12px;
+  }
+  .benefits strong {
+    font-size: 9px;
+  }
+  .benefits p {
+    font-size: 9px;
+  }
+  .story app-dashboard-preview {
+    margin-bottom: 18px;
+  }
+}
+@media (max-width: 1100px) {
+  .story {
+    padding-left: 30px;
+    padding-right: 24px;
+  }
+  .benefits {
+    gap: 9px;
+  }
+  .benefit-icon {
+    width: 32px;
+    height: 36px;
+    font-size: 20px;
+  }
+  .benefits > div {
+    gap: 7px;
+  }
+  .story-top .badge {
+    font-size: 8px;
+  }
+  .story footer {
+    gap: 8px;
+    font-size: 8px;
+  }
+}
+@media (max-width: 899px) {
+  .story {
+    padding: 25px 28px;
+  }
+  .story-top .badge {
+    display: none;
+  }
+  .pitch {
+    margin-top: 25px;
+  }
+  .pitch h1 {
+    font-size: 36px;
+  }
+  .pitch p {
+    font-size: 13px;
+  }
+  .benefits,
+  .story app-dashboard-preview,
+  .story footer {
+    display: none;
+  }
+  .desktop-break {
+    display: none;
+  }
+}
+.story {flex:1;min-height:0;}

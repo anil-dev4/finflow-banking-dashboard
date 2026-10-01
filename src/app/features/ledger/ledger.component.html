@@ -1,0 +1,106 @@
+<div class="page-header">
+  <div>
+    <h1>General ledger</h1>
+    <p>Follow the story behind every account balance.</p>
+  </div>
+  <div class="form-actions">
+    <button class="secondary" (click)="exporter.print()">Print / PDF</button
+    ><button class="primary" [disabled]="invalidRange()" (click)="export()">↓ Export CSV</button>
+  </div>
+</div>
+<div class="toolbar">
+  <label class="search"
+    >Account<select
+      #filterInput1
+      [value]="account().id"
+      (change)="accountId.set(filterInput1.value)"
+    >
+      @for (a of store.accounts(); track a.id) {
+        <option [value]="a.id">{{ a.id }} · {{ a.name }}</option>
+      }
+    </select></label
+  ><label
+    >From date<input
+      #filterInput2
+      type="date"
+      [value]="from()"
+      (change)="from.set(filterInput2.value)" /></label
+  ><label
+    >To date<input
+      #filterInput3
+      type="date"
+      [value]="to()"
+      (change)="to.set(filterInput3.value)" /></label
+  ><button class="secondary" (click)="from.set(''); to.set('')">Clear dates</button>
+</div>
+@if (invalidRange()) {
+  <p class="error" role="alert">The end date must be on or after the start date.</p>
+} @else {
+  <div class="stats">
+    <article class="stat">
+      <span class="stat-label">Opening balance</span><strong>{{ opening() | money }}</strong
+      ><small>Before the selected period</small>
+    </article>
+    <article class="stat">
+      <span class="stat-label">Period debit</span><strong>{{ debit() | money }}</strong
+      ><small>Selected period</small>
+    </article>
+    <article class="stat">
+      <span class="stat-label">Period credit</span><strong>{{ credit() | money }}</strong
+      ><small>Selected period</small>
+    </article>
+    <article class="stat">
+      <span class="stat-label">Closing balance</span><strong>{{ closing() | money }}</strong
+      ><small>{{ account().type }} account</small>
+    </article>
+  </div>
+  <section class="panel">
+    <div class="panel-heading">
+      <h2>{{ account().name }}</h2>
+      <span class="pill">{{ account().type }}</span>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <caption class="sr-only">
+          Ledger entries and running balances
+        </caption>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Reference</th>
+            <th>Description</th>
+            <th class="numeric">Debit</th>
+            <th class="numeric">Credit</th>
+            <th class="numeric">Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (e of entries(); track e.id) {
+            <tr>
+              <td>{{ e.date | calendarDate }}</td>
+              <td>{{ e.id }}</td>
+              <td>
+                <strong>{{ e.description }}</strong>
+              </td>
+              <td class="numeric debit">
+                {{ e.type === 'Debit' ? (e.amountCents | money) : '—' }}
+              </td>
+              <td class="numeric credit">
+                {{ e.type === 'Credit' ? (e.amountCents | money) : '—' }}
+              </td>
+              <td class="numeric">{{ e.balanceCents | money }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="empty">No entries for this account in the selected period.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="table-footer">
+      <span>{{ entries().length }} entries · chronological order</span
+      ><span>All amounts in EUR</span>
+    </div>
+  </section>
+}

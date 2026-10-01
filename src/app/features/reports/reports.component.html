@@ -1,0 +1,150 @@
+<div class="page-header">
+  <div>
+    <h1>Reports</h1>
+    <p>The right perspective, ready when you need it.</p>
+  </div>
+  <span class="badge">↓ CSV export · Print to PDF</span>
+</div>
+<div class="report-grid">
+  @for (report of reports; track report.id) {
+    <article class="panel report-card">
+      <span class="report-icon">{{ report.icon }}</span>
+      <p class="eyebrow">{{ report.tag }}</p>
+      <h2>{{ report.title }}</h2>
+      <p>{{ report.description }}</p>
+      <button class="secondary" (click)="open(report.id)">Generate report <span>→</span></button>
+    </article>
+  }
+</div>
+<p class="notice">
+  These reports summarise single-entry demo activity. They are not audited financial statements or a
+  balanced trial balance.
+</p>
+@if (generated()) {
+  <section class="panel report-preview" aria-labelledby="report-title">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">REPORT PREVIEW</p>
+        <h2 id="report-title">{{ title() }}</h2>
+        <p class="muted">
+          {{
+            selected() === 'balances'
+              ? 'All recorded activity'
+              : (from() || 'Beginning') + ' to ' + (to() || 'latest entry')
+          }}
+          · EUR
+        </p>
+      </div>
+      <div class="form-actions">
+        <button class="secondary" (click)="exporter.print()">Print / PDF</button
+        ><button class="primary" (click)="export()">↓ Export CSV</button>
+      </div>
+    </div>
+    @if (selected() === 'balances') {
+      <div class="table-scroll">
+        <table>
+          <caption class="sr-only">
+            Account balance report
+          </caption>
+          <thead>
+            <tr>
+              <th>Account</th>
+              <th>Type</th>
+              <th class="numeric">Opening balance</th>
+              <th class="numeric">Current balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (a of store.accounts(); track a.id) {
+              <tr>
+                <td>{{ a.id }} · {{ a.name }}</td>
+                <td>{{ a.type }}</td>
+                <td class="numeric">{{ a.openingBalanceCents | money }}</td>
+                <td class="numeric">{{ store.balance(a) | money }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else if (selected() === 'activity') {
+      <div class="table-scroll">
+        <table>
+          <caption class="sr-only">
+            Transaction register report
+          </caption>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Reference</th>
+              <th>Description</th>
+              <th>Type</th>
+              <th class="numeric">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (e of periodEntries(); track e.id) {
+              <tr>
+                <td>{{ e.date }}</td>
+                <td>{{ e.id }}</td>
+                <td>{{ e.description }}</td>
+                <td>{{ e.type }}</td>
+                <td class="numeric">{{ e.amountCents | money }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="5" class="empty">No transactions in this period.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="stats">
+        <article class="stat">
+          <span class="stat-label">Income</span><strong>{{ income() | money }}</strong>
+        </article>
+        <article class="stat">
+          <span class="stat-label">Expenses</span><strong>{{ expense() | money }}</strong>
+        </article>
+        <article class="stat">
+          <span class="stat-label">Net result</span
+          ><strong>{{ income() - expense() | money }}</strong>
+        </article>
+      </div>
+    }
+  </section>
+}
+<app-modal
+  heading="Configure report"
+  description="Choose a period, then preview and export your report."
+  ><h3>{{ draftTitle() }}</h3>
+  @if (draftKind() !== 'balances') {
+    <div class="form-grid report-dates">
+      <label class="field"
+        >From date<input
+          #filterInput1
+          type="date"
+          [value]="draftFrom()"
+          (change)="draftFrom.set(filterInput1.value)" /></label
+      ><label class="field"
+        >To date<input
+          #filterInput2
+          type="date"
+          [value]="draftTo()"
+          (change)="draftTo.set(filterInput2.value)"
+      /></label>
+    </div>
+    <p class="muted">Leave dates empty to include all recorded activity.</p>
+  } @else {
+    <p class="muted">Includes all accounts and all recorded transactions.</p>
+  }
+  @if (invalidRange()) {
+    <p class="error" role="alert">The end date must be on or after the start date.</p>
+  }
+  <div class="form-actions">
+    <button class="secondary" (click)="modal().close()">Cancel</button
+    ><button class="primary" [disabled]="invalidRange()" (click)="generate()">
+      Generate report
+    </button>
+  </div></app-modal
+>

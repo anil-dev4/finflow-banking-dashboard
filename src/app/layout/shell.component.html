@@ -1,0 +1,61 @@
+<a class="skip-link" href="#main-content">Skip to content</a>
+<aside class="sidebar" [class.open]="menuOpen()" aria-label="Main navigation">
+  <a routerLink="/dashboard" class="brand-link" (click)="menuOpen.set(false)"><app-brand /></a>
+  <p class="nav-label">WORKSPACE</p>
+  <nav>
+    @for (link of links; track link.path) {
+      <a
+        [routerLink]="link.path"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        (click)="menuOpen.set(false)"
+        ><span aria-hidden="true">{{ link.icon }}</span
+        >{{ link.label }}</a
+      >
+    }
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="demo-card">
+      <span class="status-dot"></span><strong>Your demo workspace</strong>
+      <p>Explore freely. All data is fictional and resets on reload.</p>
+    </div>
+    <button class="sign-out" (click)="signOut()">↪ <span>End demo session</span></button
+    ><small>FinFlow · Portfolio edition</small>
+  </div>
+</aside>
+@if (menuOpen()) {
+  <button class="scrim" aria-label="Close navigation" (click)="menuOpen.set(false)"></button>
+}
+<div class="workspace">
+  <header class="topbar">
+    <button
+      class="menu-toggle secondary"
+      (click)="menuOpen.set(!menuOpen())"
+      [attr.aria-expanded]="menuOpen()"
+      aria-label="Toggle navigation"
+    >
+      ☰
+    </button>
+    <div class="breadcrumb">
+      Workspace <span>/</span> <strong>{{ settings.workspace() }}</strong>
+    </div>
+    <div class="topbar-right">
+      <span class="badge"><span class="status-dot"></span> DEMO ENVIRONMENT</span
+      ><span class="top-divider"></span>
+      @if (session.profile(); as profile) {
+        <div class="avatar" [attr.aria-label]="profile.name">{{ profile.initials }}</div>
+        <div class="profile">
+          <strong>{{ profile.name }}</strong
+          ><small>{{ profile.role }}</small>
+        </div>
+      }
+    </div>
+  </header>
+  <main id="main-content" tabindex="-1">
+    <router-outlet />
+    <footer class="page-footer">
+      <span>FinFlow / Banking operations, made clear.</span
+      ><span>Fictional data · EUR · Session-only changes</span>
+    </footer>
+  </main>
+</div>

@@ -1,0 +1,44 @@
+<div class="preview" aria-label="Illustrative dashboard preview">
+  <div class="preview-side">
+    <strong><span>ϟ</span> FinFlow</strong>
+    @for (item of navigation; track item.name) {
+      <span [class.selected]="$first"><app-icon [name]="item.icon" />{{ item.name }}</span>
+    }
+  </div>
+  <div class="preview-main">
+    <div class="preview-top">
+      <span class="search"><app-icon name="search" /> Search transactions, accounts…</span
+      ><span class="period"><app-icon name="calendar" /> Sep 2026⌄</span><app-icon name="bell" /><b
+        class="mini-avatar"
+        >D</b
+      >
+    </div>
+    <div class="preview-cards">
+      <div>
+        <span class="metric-icon blue">↓</span>
+        <section>
+          <small>Total Debit</small><strong>{{ store.totalDebit() | money }}</strong
+          ><span>↗ Recorded entries</span>
+        </section>
+      </div>
+      <div>
+        <span class="metric-icon">↗</span>
+        <section>
+          <small>Total Credit</small><strong>{{ store.totalCredit() | money }}</strong
+          ><span>↗ Recorded entries</span>
+        </section>
+      </div>
+      <div>
+        <span class="metric-icon blue"><app-icon name="wallet" /></span>
+        <section>
+          <small>Asset Balance</small><strong>{{ store.assetBalance() | money }}</strong
+          ><span>Across 2 accounts</span>
+        </section>
+      </div>
+    </div>
+    <div class="preview-chart">
+      <div><strong>Transaction Summary</strong><span>September 2026⌄</span></div>
+      <app-trend [compact]="true" />
+    </div>
+  </div>
+</div>

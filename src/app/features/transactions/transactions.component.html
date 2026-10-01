@@ -1,0 +1,145 @@
+<div class="page-header">
+  <div>
+    <h1>Transactions</h1>
+    <p>Every entry, clearly accounted for.</p>
+  </div>
+  <button class="primary" (click)="open()">＋ New transaction</button>
+</div>
+@if (message()) {
+  <p class="success" role="status">{{ message() }}</p>
+}
+<section class="panel">
+  <div class="toolbar">
+    <label class="search"
+      >Search transactions<input
+        #filterInput1
+        type="search"
+        placeholder="Search description, account or reference…"
+        [value]="query()"
+        (input)="filter('query', filterInput1.value)" /></label
+    ><label
+      >Entry type<select
+        #filterInput2
+        [value]="type()"
+        (change)="filter('type', filterInput2.value)"
+      >
+        <option value="">All types</option>
+        <option>Debit</option>
+        <option>Credit</option>
+      </select></label
+    ><label
+      >Account<select
+        #filterInput3
+        [value]="account()"
+        (change)="filter('account', filterInput3.value)"
+      >
+        <option value="">All accounts</option>
+        @for (a of store.accounts(); track a.id) {
+          <option [value]="a.id">{{ a.name }}</option>
+        }
+      </select></label
+    >
+  </div>
+  <div class="table-scroll">
+    <table>
+      <caption class="sr-only">
+        Recorded demo transactions
+      </caption>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Reference</th>
+          <th>Account</th>
+          <th>Description</th>
+          <th>Type</th>
+          <th class="numeric">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (t of visible(); track t.id) {
+          <tr>
+            <td>{{ t.date | calendarDate }}</td>
+            <td>{{ t.id }}</td>
+            <td>{{ store.accountName(t.accountId) }}</td>
+            <td>
+              <strong>{{ t.description }}</strong>
+            </td>
+            <td [class.debit]="t.type === 'Debit'" [class.credit]="t.type === 'Credit'">
+              {{ t.type }}
+            </td>
+            <td class="numeric">{{ t.amountCents | money }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="empty">
+              No transactions match these filters. Try a different search.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <div class="table-footer">
+    <span>{{ filtered().length }} matching transactions · EUR</span>
+    <div class="pagination">
+      <button
+        class="secondary"
+        [disabled]="page() === 1"
+        (click)="page.set(page() - 1)"
+        aria-label="Previous page"
+      >
+        ←</button
+      ><span>Page {{ page() }} of {{ pages() }}</span
+      ><button
+        class="secondary"
+        [disabled]="page() === pages()"
+        (click)="page.set(page() + 1)"
+        aria-label="Next page"
+      >
+        →
+      </button>
+    </div>
+  </div>
+</section>
+<app-modal
+  heading="Record a transaction"
+  description="Create a sample debit or credit entry. No real money moves."
+  ><form [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-grid">
+      <label class="field">Date<input type="date" formControlName="date" required /></label
+      ><label class="field"
+        >Account<select formControlName="accountId">
+          @for (a of store.accounts(); track a.id) {
+            <option [value]="a.id">{{ a.name }}</option>
+          }
+        </select></label
+      ><label class="field"
+        >Entry type<select formControlName="type">
+          <option>Debit</option>
+          <option>Credit</option>
+        </select></label
+      ><label class="field"
+        >Amount (EUR)<input
+          formControlName="amount"
+          inputmode="decimal"
+          placeholder="0.00"
+          required
+      /></label>
+    </div>
+    <label class="field"
+      >Description<textarea
+        formControlName="description"
+        maxlength="120"
+        placeholder="What is this transaction for?"
+        required
+      ></textarea>
+    </label>
+    @if (error()) {
+      <p class="error" role="alert">{{ error() }}</p>
+    }
+    <div class="form-actions">
+      <button type="button" class="secondary" (click)="modal().close()">Cancel</button
+      ><button type="submit" class="primary">Record transaction</button>
+    </div>
+  </form></app-modal
+>

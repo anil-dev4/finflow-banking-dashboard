@@ -1,0 +1,115 @@
+<div class="page-header">
+  <div>
+    <h1>Accounts</h1>
+    <p>A well-organised foundation for your finances.</p>
+  </div>
+  <button class="primary" (click)="open()">＋ New account</button>
+</div>
+@if (message()) {
+  <p class="success" role="status">{{ message() }}</p>
+}
+<section class="panel">
+  <div class="toolbar">
+    <label class="search"
+      >Search accounts<input
+        #filterInput1
+        type="search"
+        placeholder="Search by name or account code…"
+        [value]="query()"
+        (input)="query.set(filterInput1.value)" /></label
+    ><label
+      >Account type<select #filterInput2 [value]="type()" (change)="type.set(filterInput2.value)">
+        <option value="">All types</option>
+        @for (type of types; track type) {
+          <option [value]="type">{{ type }}</option>
+        }
+      </select></label
+    >
+  </div>
+  <div class="table-scroll">
+    <table>
+      <caption class="sr-only">
+        Chart of accounts
+      </caption>
+      <thead>
+        <tr>
+          <th>Account code</th>
+          <th>Account name</th>
+          <th>Type</th>
+          <th class="numeric">Opening balance</th>
+          <th class="numeric">Current balance</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (account of filtered(); track account.id) {
+          <tr>
+            <td>{{ account.id }}</td>
+            <td>
+              <strong>{{ account.name }}</strong>
+            </td>
+            <td>
+              <span class="pill">{{ account.type }}</span>
+            </td>
+            <td class="numeric">{{ account.openingBalanceCents | money }}</td>
+            <td class="numeric">{{ store.balance(account) | money }}</td>
+            <td>
+              <a
+                class="text-button"
+                routerLink="/ledger"
+                [queryParams]="{ account: account.id }"
+                [attr.aria-label]="'View ledger for ' + account.name"
+                >View ledger →</a
+              >
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="empty">No accounts match these filters.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <div class="table-footer">
+    <span>{{ filtered().length }} of {{ store.accounts().length }} accounts</span
+    ><span>All balances in EUR</span>
+  </div>
+</section>
+<p class="notice">
+  Debit increases asset and expense balances. Credit increases liability and income balances. This
+  demo records individual entries; it is not a double-entry accounting system.
+</p>
+<app-modal heading="Create an account" description="Add an account to your demo chart of accounts."
+  ><form [formGroup]="form" (ngSubmit)="save()">
+    <label class="field"
+      >Account name<input
+        formControlName="name"
+        maxlength="60"
+        placeholder="e.g. Travel expenses"
+        required
+    /></label>
+    <div class="form-grid">
+      <label class="field"
+        >Account type<select formControlName="type">
+          @for (type of types; track type) {
+            <option [value]="type">{{ type }}</option>
+          }
+        </select></label
+      ><label class="field"
+        >Opening balance (EUR)<input
+          formControlName="opening"
+          inputmode="decimal"
+          placeholder="0.00"
+          required
+      /></label>
+    </div>
+    @if (error()) {
+      <p class="error" role="alert">{{ error() }}</p>
+    }
+    <div class="form-actions">
+      <button type="button" class="secondary" (click)="modal().close()">Cancel</button
+      ><button type="submit" class="primary">Create account</button>
+    </div>
+  </form></app-modal
+>

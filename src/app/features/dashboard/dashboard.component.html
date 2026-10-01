@@ -1,0 +1,103 @@
+<div class="page-header">
+  <div>
+    <h1>Dashboard</h1>
+    <p>Overview of your financial operations.</p>
+  </div>
+  <a class="primary" routerLink="/transactions" [queryParams]="{ create: 'true' }"
+    >＋ New transaction</a
+  >
+</div>
+<div class="stats">
+  <article class="stat">
+    <span class="stat-symbol">↓</span><span class="stat-label">Total debit</span
+    ><strong>{{ store.totalDebit() | money }}</strong
+    ><small>All recorded debit entries</small>
+  </article>
+  <article class="stat">
+    <span class="stat-symbol">↗</span><span class="stat-label">Total credit</span
+    ><strong>{{ store.totalCredit() | money }}</strong
+    ><small>All recorded credit entries</small>
+  </article>
+  <article class="stat">
+    <span class="stat-symbol">▣</span><span class="stat-label">Asset balance</span
+    ><strong>{{ store.assetBalance() | money }}</strong
+    ><small>Opening balances + activity</small>
+  </article>
+  <article class="stat">
+    <span class="stat-symbol">◇</span><span class="stat-label">Total accounts</span
+    ><strong>{{ store.accounts().length.toString().padStart(2, '0') }}</strong
+    ><small>Across your chart of accounts</small>
+  </article>
+</div>
+<div class="overview-grid">
+  <section class="panel trend-panel">
+    <div class="panel-heading">
+      <h2>Transaction trend</h2>
+      <span class="period">01–30 Sep 2026</span>
+    </div>
+    <app-trend />
+  </section>
+  <app-account-distribution class="panel" />
+</div>
+<div class="activity-grid">
+  <section class="panel recent-panel">
+    <div class="panel-heading">
+      <h2>Recent transactions</h2>
+      <a routerLink="/transactions">View all →</a>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <caption class="sr-only">
+          Five most recent transactions
+        </caption>
+        <thead>
+          <tr>
+            <th>Description / Account</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th class="numeric">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (entry of recent(); track entry.id) {
+            <tr>
+              <td>
+                <strong [title]="entry.description">{{ entry.description }}</strong
+                ><small
+                  class="account-name"
+                  [title]="store.accountName(entry.accountId) + ' · ' + entry.id"
+                  >{{ store.accountName(entry.accountId) }} · {{ entry.id }}</small
+                >
+              </td>
+              <td>{{ entry.date | calendarDate }}</td>
+              <td [class.debit]="entry.type === 'Debit'" [class.credit]="entry.type === 'Credit'">
+                {{ entry.type }}
+              </td>
+              <td class="numeric">{{ entry.amountCents | money }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section class="panel quick-actions">
+    <div class="panel-heading"><h2>Quick actions</h2></div>
+    <a routerLink="/transactions" [queryParams]="{ create: 'true' }"
+      ><span>⇄</span>
+      <div><strong>New transaction</strong><small>Record a debit or credit</small></div>
+      <b>→</b></a
+    ><a routerLink="/accounts" [queryParams]="{ create: 'true' }"
+      ><span>▣</span>
+      <div><strong>Create account</strong><small>Organise your finances</small></div>
+      <b>→</b></a
+    ><a routerLink="/reports"
+      ><span>▥</span>
+      <div><strong>Generate report</strong><small>Review and export activity</small></div>
+      <b>→</b></a
+    ><a routerLink="/ledger"
+      ><span>▤</span>
+      <div><strong>View general ledger</strong><small>Explore running balances</small></div>
+      <b>→</b></a
+    >
+  </section>
+</div>

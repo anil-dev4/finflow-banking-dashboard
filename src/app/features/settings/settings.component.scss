@@ -1,0 +1,63 @@
+.settings-tabs {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 25px;
+}
+.settings-tabs button {
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  padding: 12px 0 16px;
+  font-size: 12px;
+}
+.settings-tabs .selected {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.settings-panel {
+  max-width: 740px;
+}
+.settings-panel .panel-heading p,
+.reset-panel p {
+  font-size: 12px;
+  margin-bottom: 0;
+}
+.settings-panel form {
+  max-width: 580px;
+}
+.checkbox-field {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 12px;
+}
+.checkbox-field input {
+  accent-color: var(--accent);
+  margin-top: 3px;
+}
+.checkbox-field small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 7px;
+}
+.reset-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: 740px;
+  margin-top: 22px;
+}
+.reset-panel > button {
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  .reset-panel {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
